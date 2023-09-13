@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/persons';
+const baseUrl = 'https://bitter-bush-4659.fly.dev/api/persons';
 
 const getAll = () => {
   return axios.get(baseUrl);
@@ -10,12 +10,12 @@ const create = (newPerson) => {
   return axios.post(baseUrl, newPerson);
 };
 
-const remove = (id) => {
-    return axios.delete(`${baseUrl}/${id}`);
+const remove = (_id) => {
+    return axios.delete(`${baseUrl}/${_id}`);
   };
 
-  const update = (id, updatedPerson) => {
-    return axios.put(`${baseUrl}/${id}`, updatedPerson);
+  const update = (_id, updatedPerson) => {
+    return axios.put(`${baseUrl}/${_id}`, updatedPerson);
 };
 
   export default { getAll, create, remove, update};

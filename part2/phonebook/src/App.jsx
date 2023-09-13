@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import phonebookService from './phonebookServices';
 
 const Filter = ({ searchTerm, handleSearch }) => (
@@ -24,9 +24,9 @@ const PersonForm = ({ newName, newNumber, handleNameChange, handleNumberChange, 
 const Persons = ({ filteredPersons, handleDelete }) => (
   <ul>
     {filteredPersons.map((person) => (
-      <li key={person.id}>
+      <li key={person._id}>
         {person.name} {person.number}
-        <button onClick={() => handleDelete(person.id)}>Delete</button>
+        <button onClick={() => handleDelete(person._id)}>Delete</button>
       </li>
     ))}
   </ul>
@@ -54,7 +54,7 @@ const App = () => {
         setPersons(response.data);
       })
       .catch(error => {
-        setMessage("Failed to fetch data from the server");
+        setMessage(error.response.data.error);
         setMessageType('error');
         setTimeout(() => setMessage(null), 5000);
       });
@@ -68,10 +68,10 @@ const App = () => {
     if (existingPerson) {
         if (existingPerson.number !== newNumber) {
             if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
-                phonebookService.update(existingPerson.id, { ...existingPerson, number: newNumber })
+                phonebookService.update(existingPerson._id, { ...existingPerson, number: newNumber })
                     .then(response => {
                       console.log('Update response:', response.data);
-                      setPersons(persons.map(p => p.id !== existingPerson.id ? p : response.data));
+                      setPersons(persons.map(p => p._id !== existingPerson._id ? p : response.data));
                       setNewName('');
                       setNewNumber('');
 
@@ -80,7 +80,7 @@ const App = () => {
                       setTimeout(() => setMessage(null), 5000);
                     })
                     .catch(error => {
-                      setMessage("Failed to update the number");
+                      setMessage(error.response.data.error);
                       setMessageType('error');
                       setTimeout(() => setMessage(null), 5000);
                     });
@@ -107,7 +107,7 @@ const App = () => {
         setTimeout(() => setMessage(null), 5000);
     })
     .catch(error => {
-        setMessage("Failed to add person");
+        setMessage(error.response.data.error);
         setMessageType('error');
         setTimeout(() => setMessage(null), 5000);
     });
@@ -117,11 +117,11 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
   const handleSearch = (event) => setSearchTerm(event.target.value);
-  const handleDelete = (id) => {
+  const handleDelete = (_id) => {
     if (window.confirm("Do you really want to delete this entry?")) {
-      phonebookService.remove(id)
+      phonebookService.remove(_id)
         .then(() => {
-          setPersons(persons.filter(person => person.id !== id));
+          setPersons(persons.filter(person => person._id !== _id));
 
           setMessage("Entry deleted successfully");
           setMessageType('success');
@@ -132,7 +132,7 @@ const App = () => {
           setMessage("The person was already removed from the server or another error occurred");
           setMessageType('error');
           setTimeout(() => setMessage(null), 5000);
-          setPersons(persons.filter(p => p.id !== id));
+          setPersons(persons.filter(p => p._id !== _id));
         });
     }
   };
