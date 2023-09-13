@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for bitter-bush-4659 on 2023-09-13T14:52:55+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "bitter-bush-4659"
+primary_region = "cdg"
+
+[build]
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[env]
+PORT = "3001"
