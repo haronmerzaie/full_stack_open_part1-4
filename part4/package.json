@@ -10,7 +10,8 @@
     "lint": "node_modules/.bin/eslint .",
     "lint:fix": "node_modules/.bin/eslint . --fix",
     "server": "json-server --watch db.json --port 3003",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "proxy": "http://localhost:3003",
   "author": "Haron Merzaie",

@@ -38,6 +38,15 @@ app.use('/api/login', loginRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogsRouter);
 
+// If the environment is set to 'test', set up routes specific to testing
+if (process.env.NODE_ENV === 'test') {
+    // Import the testing router
+    const testingRouter = require('./controllers/testing');
+
+    // Use the testing routes under the '/api/testing' prefix
+    app.use('/api/testing', testingRouter);
+}
+
 // Handle unknown endpoints and errors
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
